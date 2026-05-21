@@ -1,6 +1,6 @@
-# Maintainer Flow
+# Autonomous Maintenance Agent
 
-Maintainer Flow turns repetitive repository upkeep into structured, file-aware workflow.
+Autonomous Maintenance Agent turns repetitive repository upkeep into structured, file-aware workflow.
 
 Instead of asking maintainer to inspect repo, guess scope, edit files manually, then write reviewer notes, agent handles full maintenance loop:
 

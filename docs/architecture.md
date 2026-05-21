@@ -1,6 +1,6 @@
 # Architecture
 
-Maintainer Flow uses simple pipeline so reviewer can inspect logic fast.
+Autonomous Maintenance Agent uses simple pipeline so reviewer can inspect logic fast.
 
 ## Components
 

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to Maintainer Flow.
+Thanks for contributing to Autonomous Maintenance Agent.
 
 ## Contribution areas
 
