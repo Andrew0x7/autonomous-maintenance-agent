@@ -1,6 +1,6 @@
 # Evaluation
 
-## What reviewer can verify fast
+## What maintainers can verify quickly
 
 - README explains problem and workflow
 - package metadata exists in `pyproject.toml`
@@ -15,7 +15,7 @@
 - concrete niche: repository maintenance
 - visible file reasoning
 - clear artifact output
-- small codebase, low reviewer effort
+- small codebase, low maintenance overhead
 
 ## Limits
 
@@ -25,4 +25,4 @@
 
 ## Why this still works
 
-Project is easy to inspect, easy to run, and easy to understand. Reviewer can map request to output without reading large codebase.
+Project is easy to inspect, easy to run, and easy to understand. Maintainers can map request to output without reading a large codebase.

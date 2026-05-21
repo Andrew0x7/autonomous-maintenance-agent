@@ -13,4 +13,4 @@ Explain problem, expected cleanup, or requested update.
 - validation command if known
 
 ## Success signal
-Describe what reviewer should see after task completes.
+Describe what maintainer should see after task completes.

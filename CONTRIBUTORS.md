@@ -3,7 +3,7 @@
 ## Core contributors
 
 - Anthropic Claude Opus — workflow design, reasoning structure, repository framing, summary format
-- Sam — project direction, evaluator strategy, packaging requirements, review simplification
+- Sam — project direction, evaluator strategy, packaging requirements, maintenance workflow direction
 
 ## Notes
 

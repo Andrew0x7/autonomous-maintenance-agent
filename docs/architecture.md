@@ -1,6 +1,6 @@
 # Architecture
 
-Autonomous Maintenance Agent uses simple pipeline so reviewer can inspect logic fast.
+Autonomous Maintenance Agent uses simple pipeline so maintainers can inspect logic quickly.
 
 ## Components
 

@@ -14,7 +14,7 @@
 - repositioned project as Autonomous Maintenance Agent
 - expanded README with stronger problem framing and visible workflow
 - updated package metadata to reflect Anthropic Claude Opus contribution
-- improved repository structure for faster reviewer inspection
+- improved repository structure for faster maintainer inspection
 
 ## 0.1.0 - 2026-05-21
 

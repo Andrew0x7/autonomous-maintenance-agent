@@ -28,4 +28,4 @@ Agent returns markdown summary with:
 - applied files
 - validation section
 
-This output is optimized for reviewer handoff and issue tracking.
+This output is optimized for maintainer handoff and issue tracking.
