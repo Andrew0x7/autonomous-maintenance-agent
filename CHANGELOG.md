@@ -11,7 +11,7 @@
 - richer sample request set and release framing
 
 ### Changed
-- repositioned project as Autonomous Repo Maintenance Agent
+- repositioned project as Maintainer Flow
 - expanded README with stronger problem framing and visible workflow
 - updated package metadata to reflect Anthropic Claude Opus contribution
 - improved repository structure for faster reviewer inspection

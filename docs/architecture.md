@@ -1,6 +1,6 @@
 # Architecture
 
-Autonomous Repo Maintenance Agent uses simple pipeline so reviewer can inspect logic fast.
+Maintainer Flow uses simple pipeline so reviewer can inspect logic fast.
 
 ## Components
 

@@ -1,6 +1,6 @@
-# Repo Maintenance Operator
+# Maintainer Flow
 
-Repo Maintenance Operator turns repetitive repository upkeep into structured, file-aware workflow.
+Maintainer Flow turns repetitive repository upkeep into structured, file-aware workflow.
 
 Instead of asking maintainer to inspect repo, guess scope, edit files manually, then write reviewer notes, agent handles full maintenance loop:
 

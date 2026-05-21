@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to Autonomous Repo Maintenance Agent.
+Thanks for contributing to Maintainer Flow.
 
 ## Contribution areas
 
