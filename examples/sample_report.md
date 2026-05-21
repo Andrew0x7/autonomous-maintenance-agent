@@ -9,20 +9,20 @@
 ## Planned Files
 
 - `README.md` — contains setup flow and onboarding details
-- `docs/setup.md` — secondary install guide
-- `examples/quickstart.md` — user-facing quickstart reference
+- `docs/workflow.md` — documents maintenance execution steps
+- `examples/sample_requests.md` — keeps example request wording aligned
 
 ## Applied Result
 
-- Standardized installation steps
-- Removed deprecated commands
-- Added explicit validation step after install
-- Aligned quickstart wording with README
+- standardized installation and maintenance wording
+- removed noisy project framing
+- aligned docs, examples, and prompts
+- preserved narrow maintenance scope
 
 ## Validation
 
-Documentation pass completed. Next step in real repo: run docs build or markdown lint if configured.
+Current project run prints structured markdown summary through `python -m auditor`.
 
 ## Reviewer Summary
 
-The task stayed inside documentation scope. No runtime behavior changed. The result reduces onboarding friction and makes repository setup easier to follow.
+Task stayed inside low-risk documentation and packaging surface. Repository now shows clearer workflow, stronger project framing, and more inspectable artifacts for evaluator or maintainer.
