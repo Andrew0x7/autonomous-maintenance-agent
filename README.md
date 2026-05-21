@@ -1,98 +1,280 @@
 # Autonomous Maintenance Agent
 
-Autonomous Maintenance Agent helps small teams handle repetitive repository upkeep without turning every maintenance task into manual overhead.
+Autonomous Maintenance Agent helps small teams turn repetitive repository upkeep into a structured, file-aware workflow.
 
-It was built around practical maintainer work: triaging narrow requests, finding the right files, preparing scoped changes, validating those changes, and leaving a clear handoff for the next person who touches the repository.
-
-Instead of treating maintenance as loose chat output, this project turns it into a structured, file-aware workflow.
-
-## Why it exists
-
-Repository maintenance is rarely difficult in isolation, but it becomes expensive when repeated every week.
-
-Common friction points:
-
-- small maintenance requests arrive with vague scope
-- teams touch the wrong files or miss related docs
-- routine cleanup steals time from feature work
-- handoff notes are inconsistent or incomplete
-- repeated upkeep slowly creates drift across repository files
-
-Autonomous Maintenance Agent exists to make that work more predictable, more traceable, and easier to continue over time.
-
-## What it helps with
-
-- issue triage for narrow maintenance tasks
-- repository inspection before edits
-- file-aware planning for low-risk updates
-- documentation and configuration upkeep
-- structured change summaries for human handoff
-- repeatable maintenance flow for small teams
-
-## How it works
+It focuses on practical maintenance work: reading a maintenance request, scanning repository files, identifying likely targets, preparing scoped changes, and returning a clear markdown summary for handoff.
 
 ```text
-Maintenance request
-    ↓
-Repository scan
-    ↓
-Keyword + path matching
-    ↓
-Scoped file plan
-    ↓
-Targeted edits
-    ↓
-Validation step
-    ↓
-Maintenance summary
+┌─────────────────────┐
+│ Maintenance Request │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Repository Scan     │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Keyword + Path Plan │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Scoped File Changes │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Validation Summary  │
+└─────────────────────┘
 ```
 
-The goal is not to replace maintainers. The goal is to reduce repetitive repository work while keeping decisions grounded in project context.
+## ✨ Features
 
-## Core workflow
+- 🔎 Repository scan before planning changes
+- 🧭 Keyword-based file targeting for narrow maintenance tasks
+- 📝 Markdown summary for planned files, applied files, and validation status
+- 🧱 Minimal Python package structure with CLI entrypoint
+- 📚 Included docs, prompts, and example artifacts for extension
+- 🔁 Repeatable workflow for documentation upkeep, config refreshes, and low-risk maintenance tasks
 
-1. Accept a maintenance request in plain English.
-2. Scan repository structure for likely target files.
-3. Ignore noisy paths like `.git/` and `__pycache__/`.
-4. Build a constrained file-level plan from request keywords.
-5. Apply scoped updates only to matched files.
-6. Run validation or repo-specific follow-up checks.
-7. Produce a clear maintenance summary for handoff.
+## 🚀 Why it exists
 
-## Design goals
+Small teams often lose time on maintenance work that is not hard, but repeats constantly:
 
-- keep maintenance tasks narrow and explainable
-- reduce wasted time on repetitive repo chores
-- keep file selection grounded in repository structure
-- support human-in-the-loop decisions where needed
-- make maintenance output easy to reuse in future tasks
+- outdated setup instructions
+- stale configuration examples
+- small cleanup requests with vague scope
+- repetitive repository hygiene tasks
+- weak handoff notes after narrow edits
 
-## Example use cases
+This project exists to keep that work structured, traceable, and easier to continue over time.
 
-- refresh outdated onboarding docs
-- update stale configuration examples
-- isolate low-risk helper refactors
-- convert rough maintenance note into file plan
-- generate structured follow-up summary after edits
-- support maintainers working across many small repositories
+## 📦 Installation
 
-## Inputs
+### Requirements
 
-- local repository path
-- maintenance request title
-- maintenance request description
-- optional constraints
-- optional validation command
+- Python 3.11+
+- Git
 
-## Outputs
+### Clone repository
 
-- planned file list
-- applied file list
-- validation status
-- markdown maintenance summary
-- reusable prompts and examples for future tasks
+```bash
+git clone https://github.com/Andrew0x7/autonomous-maintenance-agent.git
+cd autonomous-maintenance-agent
+```
 
-## Repository layout
+### Install from source
+
+```bash
+pip install -e .
+```
+
+### Alternative install with requirements file
+
+```bash
+pip install -r requirements.txt
+```
+
+### Verify package entrypoint
+
+```bash
+python -m auditor
+```
+
+Or use script entrypoint defined in `pyproject.toml`:
+
+```bash
+repo-maintainer
+```
+
+## ⚙️ What happens when it runs
+
+Current CLI entrypoint creates a sample maintenance request and executes the full workflow against the current repository.
+
+Default request:
+
+```text
+Title: Update outdated README setup instructions
+Description: Refresh onboarding steps and remove deprecated install commands.
+Constraints: docs-only, no runtime code changes.
+```
+
+Execution flow:
+
+1. inspect repository files
+2. extract keywords from title and description
+3. match likely target files
+4. build scoped maintenance plan
+5. generate applied-file summary
+6. return markdown output
+
+## 🧪 Quick Start
+
+### 1) Clone project
+
+```bash
+git clone https://github.com/Andrew0x7/autonomous-maintenance-agent.git
+cd autonomous-maintenance-agent
+```
+
+### 2) Install package
+
+```bash
+pip install -e .
+```
+
+### 3) Run agent
+
+```bash
+python -m auditor
+```
+
+### 4) Expected output shape
+
+```text
+# Maintenance Summary: Update outdated README setup instructions
+
+## Planned Files
+- `README.md` — Matched request keywords
+
+## Applied Files
+- `README.md` — Updated for maintenance task: Matched request keywords
+
+## Validation
+Validation placeholder: run repo-specific tests or lint commands here.
+```
+
+## 🛠️ Usage
+
+### Run with module entrypoint
+
+```bash
+python -m auditor
+```
+
+### Run with installed console script
+
+```bash
+repo-maintainer
+```
+
+### Run inside a virtual environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+python -m auditor
+```
+
+### Build distribution artifacts
+
+```bash
+python -m build
+```
+
+### Inspect package metadata
+
+```bash
+python - <<'PY'
+from importlib.metadata import metadata
+m = metadata('autonomous-maintenance-agent')
+print(m['Name'])
+print(m['Version'])
+print(m['Summary'])
+PY
+```
+
+## 📋 Example Request
+
+Current code uses a built-in request object in `auditor/__main__.py`:
+
+```python
+request = MaintenanceRequest(
+    title="Update outdated README setup instructions",
+    description="Refresh onboarding steps and remove deprecated install commands.",
+    constraints=["docs-only", "no runtime code changes"],
+)
+```
+
+You can modify that request and run again:
+
+```bash
+python -m auditor
+```
+
+Example request ideas:
+
+```text
+Title: Refresh stale configuration examples
+Description: Update config docs to match current environment variable names.
+Constraints: docs-only, config-only
+```
+
+```text
+Title: Clean up onboarding guide
+Description: Remove deprecated setup steps and align quick start commands.
+Constraints: markdown-only
+```
+
+```text
+Title: Review helper module references
+Description: Identify likely files affected by a narrow helper rename.
+Constraints: no runtime edits
+```
+
+## 📤 Example Output
+
+The agent returns a markdown summary with:
+
+- request title
+- planned files
+- applied files
+- validation note
+
+Sample output:
+
+```markdown
+# Maintenance Summary: Update outdated README setup instructions
+
+## Planned Files
+- `README.md` — Matched request keywords
+- `docs/workflow.md` — Matched request keywords
+
+## Applied Files
+- `README.md` — Updated for maintenance task: Matched request keywords
+- `docs/workflow.md` — Updated for maintenance task: Matched request keywords
+
+## Validation
+Validation placeholder: run repo-specific tests or lint commands here.
+```
+
+## 🧠 How file selection works
+
+Keyword extraction happens from request title and description.
+
+High-level behavior in `auditor/agent.py`:
+
+- lowercase request text
+- remove short and noisy tokens
+- scan repository files recursively
+- skip noisy paths like `.git/`, `__pycache__/`, `.pytest_cache/`
+- match file paths against normalized keywords
+- fall back to high-signal files if nothing matches
+
+Current fallback files:
+
+```text
+README.md
+docs/overview.md
+src/main.py
+```
+
+Candidate list is limited to first 8 matches.
+
+## 🗂️ Project Structure
 
 ```text
 auditor/
@@ -104,59 +286,89 @@ examples/
   sample_requests.md
 docs/
   architecture.md
-  workflow.md
   evaluation.md
+  workflow.md
 prompts/
-  system_prompt.md
   repo_request.md
+  system_prompt.md
 CHANGELOG.md
 CONTRIBUTING.md
 CONTRIBUTORS.md
+LICENSE
 MANIFEST.in
 pyproject.toml
 README.md
 requirements.txt
 ```
 
-## Example workflow
+## 🔧 Development
 
-Request:
-
-```text
-Title: Update outdated README setup instructions
-Description: Refresh onboarding steps and remove deprecated install commands.
-Constraints: docs-only, no runtime code changes.
-```
-
-Result:
-
-- agent scans repo tree
-- `README.md` and related docs match request keywords
-- agent plans docs-only changes
-- validation returns repo-specific next step
-- summary explains what changed and why
-
-## Quick start
+### Run module directly during development
 
 ```bash
 python -m auditor
 ```
 
-Expected output: markdown maintenance summary for sample request.
+### Read CLI entrypoint
 
-## Architecture notes
+```bash
+python - <<'PY'
+from pathlib import Path
+print(Path('auditor/__main__.py').read_text())
+PY
+```
 
-The repository is intentionally small and direct.
+### Read core workflow
 
-- prompts define request interpretation behavior
-- docs explain workflow and evaluation flow
-- examples show expected inputs and outputs
-- package metadata keeps installation and entrypoints explicit
-- release history tracks public project milestones
+```bash
+python - <<'PY'
+from pathlib import Path
+print(Path('auditor/agent.py').read_text())
+PY
+```
 
-This keeps the project practical for development, experimentation, and gradual extension.
+### Check git status after changes
 
-## Anthropic Claude Opus role
+```bash
+git status --short
+```
+
+### Create a release tag
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+## 📚 Included Documentation
+
+- `docs/architecture.md` — architecture overview
+- `docs/workflow.md` — workflow and summary format
+- `docs/evaluation.md` — evaluation notes and scope
+- `prompts/system_prompt.md` — base system behavior
+- `prompts/repo_request.md` — request template
+- `examples/sample_requests.md` — example inputs
+- `examples/sample_report.md` — example output artifact
+
+## 🎯 Good fit for this project
+
+Use this project when you want to explore or extend workflows like:
+
+- repository maintenance assistants
+- scoped documentation refresh tools
+- config upkeep helpers
+- human-in-the-loop maintenance automation
+- file-aware planning before edits
+
+## ⚠️ Current limits
+
+- current CLI uses a built-in sample request
+- validation step is placeholder text
+- no live file patching yet
+- no external model call in runtime path yet
+- best suited for narrow maintenance scenarios, not broad codebase rewrites
+
+## 🤖 Anthropic Claude Opus role
 
 Current version was developed with Anthropic Claude Opus as reasoning model for:
 
@@ -168,10 +380,16 @@ Current version was developed with Anthropic Claude Opus as reasoning model for:
 
 Model use is visible in prompts, docs, examples, and contributor attribution.
 
-## Next extensions
+## 🗺️ Next extensions
 
+```text
 - connect repo-specific validation commands
 - add policy rules for protected paths
 - support ignore lists per project
 - score maintenance plans by risk level
 - export JSON summary for CI pipelines
+```
+
+## 📄 License
+
+MIT License. See `LICENSE`.
