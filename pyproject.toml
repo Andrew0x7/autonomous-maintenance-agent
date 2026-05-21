@@ -3,7 +3,7 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "autonomous-repo-maintenance-agent"
+name = "autonomous-maintenance-agent"
 version = "0.2.0"
 description = "Agent workflow for scoped repository maintenance, validation, and reviewer-ready summaries."
 readme = "README.md"
@@ -32,9 +32,9 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/Andrew0x7/autonomous-repo-maintenance-agent"
-Repository = "https://github.com/Andrew0x7/autonomous-repo-maintenance-agent"
-Issues = "https://github.com/Andrew0x7/autonomous-repo-maintenance-agent/issues"
+Homepage = "https://github.com/Andrew0x7/autonomous-maintenance-agent"
+Repository = "https://github.com/Andrew0x7/autonomous-maintenance-agent"
+Issues = "https://github.com/Andrew0x7/autonomous-maintenance-agent/issues"
 
 [project.scripts]
 repo-maintainer = "auditor.__main__:main"
