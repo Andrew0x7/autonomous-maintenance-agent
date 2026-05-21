@@ -1,6 +1,6 @@
-# Autonomous Repo Maintenance Agent
+# Repo Maintenance Operator
 
-Autonomous Repo Maintenance Agent turns repetitive repository upkeep into structured, file-aware workflow.
+Repo Maintenance Operator turns repetitive repository upkeep into structured, file-aware workflow.
 
 Instead of asking maintainer to inspect repo, guess scope, edit files manually, then write reviewer notes, agent handles full maintenance loop:
 
@@ -133,9 +133,9 @@ Result:
 - validation returns repo-specific next step
 - summary explains what changed and why
 
-## Xiaomi MiMo fit
+## Why this repo is easy to review
 
-This project is good fit for Xiaomi MiMo because it is small, concrete, and easy to inspect. Reviewer can open repo and immediately see workflow, prompts, package metadata, release notes, example inputs, and output artifact. It shows agentic file reasoning inside real repository work instead of generic chatbot behavior.
+This repo is small, concrete, and easy to inspect. A reviewer can open it and immediately see workflow, prompts, package metadata, release notes, example inputs, and output artifact. It shows agentic file reasoning inside real repository work instead of generic chatbot behavior.
 
 ## Anthropic Claude Opus role
 

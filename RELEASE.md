@@ -7,7 +7,7 @@
 - added docs for architecture, workflow, and evaluation
 - added prompts and sample requests
 - added contributor and changelog files
-- improved Xiaomi MiMo review surface with more files and clearer proof package
+- improved repo review surface with more files and clearer proof package
 
 ## v0.1.0
 

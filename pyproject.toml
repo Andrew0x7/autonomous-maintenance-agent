@@ -18,7 +18,7 @@ keywords = [
   "maintenance",
   "automation",
   "developer-tools",
-  "xiaomi-mimo"
+  "repo-ops"
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
