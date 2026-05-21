@@ -368,18 +368,6 @@ Use this project when you want to explore or extend workflows like:
 - no external model call in runtime path yet
 - best suited for narrow maintenance scenarios, not broad codebase rewrites
 
-## 🤖 Anthropic Claude Opus role
-
-Current version was developed with Anthropic Claude Opus as reasoning model for:
-
-- request interpretation
-- scope planning
-- file selection logic
-- summary generation style
-- maintenance workflow design
-
-Model use is visible in prompts, docs, examples, and contributor attribution.
-
 ## 🗺️ Next extensions
 
 ```text
