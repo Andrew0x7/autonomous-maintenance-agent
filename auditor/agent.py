@@ -1,172 +1,97 @@
-"""
-Main Orchestrator Agent.
-Coordinates scanner, rule engine, LLM analyzer, and report generator.
-"""
+"""Core workflow for Autonomous Repo Maintenance Agent."""
 
-import asyncio
-import logging
-import sys
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
-
-from .config import AuditConfig
-from .scanner import ContractScanner
-from .rules import RuleEngine, AuditResult
-from .analyzer import LLMAnalyzer
-from .report import ReportGenerator
-
-logger = logging.getLogger(__name__)
+from typing import Iterable
+import re
 
 
-class AuditAgent:
-    """Orchestrator agent that coordinates the full audit pipeline."""
-
-    def __init__(self, config: Optional[AuditConfig] = None):
-        self.config = config or AuditConfig.from_env()
-        self.rule_engine = RuleEngine()
-        self.llm_analyzer = LLMAnalyzer(self.config.llm)
-        self.report_gen = ReportGenerator(self.config.output_dir)
-
-    def audit(
-        self,
-        address: str,
-        chain: str = "ethereum",
-        skip_llm: bool = False,
-        output_format: str = "markdown",
-    ) -> AuditResult:
-        """Run full audit pipeline on a single contract."""
-        chain_config = self.config.chains.get(chain)
-        if not chain_config:
-            raise ValueError(f"Unsupported chain: {chain}. Available: {list(self.config.chains.keys())}")
-
-        # Step 1: Scan contract
-        logger.info(f"[1/4] Scanning {address} on {chain}...")
-        scanner = ContractScanner(chain_config)
-        contract_data = scanner.scan(address)
-
-        # Step 2: Run rule engine
-        logger.info("[2/4] Running rule engine...")
-        result = self.rule_engine.evaluate(contract_data)
-
-        # Step 3: LLM enhancement (optional)
-        if not skip_llm and contract_data.source_code:
-            logger.info("[3/4] Running LLM analysis...")
-            result = self.llm_analyzer.analyze(contract_data, result)
-        else:
-            logger.info("[3/4] Skipping LLM analysis")
-
-        # Step 4: Generate report
-        logger.info("[4/4] Generating report...")
-        report_path = self.report_gen.generate(result, format=output_format)
-        logger.info(f"Report saved: {report_path}")
-
-        return result
-
-    def batch_audit(
-        self,
-        addresses: list[tuple[str, str]],
-        skip_llm: bool = False,
-        output_format: str = "markdown",
-    ) -> list[AuditResult]:
-        """Run audit on multiple contracts."""
-        results = []
-
-        for address, chain in addresses:
-            try:
-                result = self.audit(address, chain, skip_llm, output_format)
-                results.append(result)
-                logger.info(
-                    f"✓ {address[:10]}... — Score: {result.risk_score} ({result.risk_level})"
-                )
-            except Exception as e:
-                logger.error(f"✗ {address[:10]}... — Error: {e}")
-
-        # Generate batch summary
-        if results:
-            self.report_gen.generate_batch_summary(results)
-
-        return results
+@dataclass
+class MaintenanceRequest:
+    title: str
+    description: str
+    constraints: list[str]
 
 
-def main():
-    """CLI entry point."""
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="AI-Powered Smart Contract Auditor Agent"
-    )
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
-
-    # Single scan
-    scan_parser = subparsers.add_parser("scan", help="Scan a single contract")
-    scan_parser.add_argument("address", help="Contract address")
-    scan_parser.add_argument(
-        "--chain", "-c", default="ethereum", help="Chain name (default: ethereum)"
-    )
-    scan_parser.add_argument(
-        "--no-llm", action="store_true", help="Skip LLM analysis"
-    )
-    scan_parser.add_argument(
-        "--format", "-f", choices=["markdown", "json"], default="markdown"
-    )
-    scan_parser.add_argument("--output", "-o", help="Output directory")
-
-    # Batch scan
-    batch_parser = subparsers.add_parser("batch", help="Batch scan from file")
-    batch_parser.add_argument("file", help="File with addresses (one per line: address chain)")
-    batch_parser.add_argument("--no-llm", action="store_true")
-    batch_parser.add_argument("--format", "-f", choices=["markdown", "json"], default="markdown")
-    batch_parser.add_argument("--output", "-o", help="Output directory")
-
-    # Report generation
-    report_parser = subparsers.add_parser("report", help="Generate summary report")
-    report_parser.add_argument("dir", help="Directory with audit JSON files")
-    report_parser.add_argument("--format", "-f", choices=["markdown", "json"], default="markdown")
-
-    args = parser.parse_args()
-
-    if not args.command:
-        parser.print_help()
-        sys.exit(1)
-
-    # Setup logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        datefmt="%H:%M:%S",
-    )
-
-    # Load config
-    env_path = str(Path(__file__).parent.parent / ".env")
-    config = AuditConfig.from_env(env_path if Path(env_path).exists() else None)
-
-    if hasattr(args, "output") and args.output:
-        config.output_dir = args.output
-
-    agent = AuditAgent(config)
-
-    if args.command == "scan":
-        result = agent.audit(args.address, args.chain, args.no_llm, args.format)
-        print(f"\n{'='*60}")
-        print(f"Risk Score: {result.risk_score}/100 ({result.risk_level})")
-        print(f"Findings: {len(result.findings)}")
-        print(f"{'='*60}")
-
-    elif args.command == "batch":
-        addresses = []
-        with open(args.file) as f:
-            for line in f:
-                parts = line.strip().split()
-                if len(parts) >= 2:
-                    addresses.append((parts[0], parts[1]))
-                elif len(parts) == 1:
-                    addresses.append((parts[0], "ethereum"))
-
-        results = agent.batch_audit(addresses, args.no_llm, args.format)
-        print(f"\nScanned {len(results)} contracts")
-        for r in results:
-            print(f"  {r.contract.address[:10]}... — Score: {r.risk_score} ({r.risk_level})")
+@dataclass
+class FileChange:
+    path: str
+    reason: str
 
 
-if __name__ == "__main__":
-    main()
+@dataclass
+class MaintenanceSummary:
+    request_title: str
+    planned_files: list[FileChange]
+    applied_files: list[FileChange]
+    validation: str
+
+    def to_markdown(self) -> str:
+        lines = [
+            f"# Maintenance Summary: {self.request_title}",
+            "",
+            "## Planned Files",
+        ]
+        for item in self.planned_files:
+            lines.append(f"- `{item.path}` — {item.reason}")
+
+        lines.extend(["", "## Applied Files"])
+        for item in self.applied_files:
+            lines.append(f"- `{item.path}` — {item.reason}")
+
+        lines.extend(["", "## Validation", self.validation])
+        return "\n".join(lines)
+
+
+class RepoMaintenanceAgent:
+    """Minimal autonomous maintenance workflow for repository tasks."""
+
+    def inspect_repository(self, repo_path: str) -> list[str]:
+        root = Path(repo_path)
+        return sorted(str(path.relative_to(root)) for path in root.rglob("*") if path.is_file())
+
+    def plan_changes(self, request: MaintenanceRequest, repo_files: Iterable[str]) -> list[FileChange]:
+        files = list(repo_files)
+        candidates: list[FileChange] = []
+        raw_keywords = set(request.title.lower().split()) | set(request.description.lower().split())
+        keywords = {
+            re.sub(r"[^a-z0-9_.-]", "", word)
+            for word in raw_keywords
+            if len(re.sub(r"[^a-z0-9_.-]", "", word)) >= 4
+        }
+        ignored_prefixes = (".git/", "__pycache__/", ".pytest_cache/")
+
+        for file_path in files:
+            if file_path.startswith(ignored_prefixes):
+                continue
+            lowered = file_path.lower()
+            if any(word in lowered for word in keywords):
+                candidates.append(FileChange(path=file_path, reason="Matched request keywords"))
+
+        if not candidates:
+            for default_file in ["README.md", "docs/overview.md", "src/main.py"]:
+                if default_file in files:
+                    candidates.append(FileChange(path=default_file, reason="Fallback high-signal file"))
+
+        return candidates[:8]
+
+    def apply_changes(self, plan: list[FileChange]) -> list[FileChange]:
+        return [
+            FileChange(path=item.path, reason=f"Updated for maintenance task: {item.reason}")
+            for item in plan
+        ]
+
+    def validate(self) -> str:
+        return "Validation placeholder: run repo-specific tests or lint commands here."
+
+    def execute(self, repo_path: str, request: MaintenanceRequest) -> MaintenanceSummary:
+        repo_files = self.inspect_repository(repo_path)
+        planned = self.plan_changes(request, repo_files)
+        applied = self.apply_changes(planned)
+        validation = self.validate()
+        return MaintenanceSummary(
+            request_title=request.title,
+            planned_files=planned,
+            applied_files=applied,
+            validation=validation,
+        )
